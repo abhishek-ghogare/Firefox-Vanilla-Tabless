@@ -27,7 +27,7 @@
 ![Screenshot 2](screenshots/screenshot%202.png "View 2")
 ![Screenshot 3](screenshots/screenshot%203.png "View 3")
 ![Screenshot 4](screenshots/screenshot%204.png "View 4")
-![Screenshot 5](screenshots/screenshot%205.png "View 5")
 
 ### Tested on
   1. Windows 11 + Firefox 108
+  2. MacOS Monterey 12.6.1 + Firefox 108
