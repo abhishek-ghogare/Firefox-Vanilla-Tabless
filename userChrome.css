@@ -99,7 +99,7 @@
  * Hide tabs
  ***************************/
 /* Hide entire tab box */
-#tabbrowser-tabs {
+#tabbrowser-tabs, #new-tab-button { /* new-tab-button becomes visible for a short time somehow if a tab is closed using cmd+w, and moves the title bar a little. */ {
     visibility: collapse;
 }
 
