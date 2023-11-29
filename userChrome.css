@@ -2,8 +2,8 @@
 
 /**
  * Tested on:
- *   1. Windows 11 + Firefox 108.0
- *   2. MacOS 12.6.1 Monterey + Firefox 108.0
+ *   1. NOT TESTED YET Windows 11 + Firefox 108.0
+ *   2. MacOS 12.6.1 Monterey + Firefox 120.0
  */
 
 /***************************
@@ -28,12 +28,15 @@
     --red: #c94f6d;
 
     --navbar-right-margin: 80px;  /* Space left for window control buttons. Space just righ of Menu button. */
-    --navbar-left-margin: 40px;  /* Space left for "Firefox View" buttons. Space just left of navigation buttons. */
+    --navbar-left-margin: 40px;   /* Space left for "Firefox View" buttons. Space just left of navigation buttons. */
     --navbar-top-margin: -29px;
-    --navbar-bottom-margin: 0px;
 
     --firefox-view-button-down-shift: -27px;
     --firefox-view-button-right-shift: 0px;
+    
+    /* browser-toolbar (address bar + navigation buttons + more tools button + application menu button) 
+       has a slight transparant background. So making it transparant so that theme colors can be seen clearly. */
+    --toolbar-bgcolor: transparent !important; 
 }
 
 :root[privatebrowsingmode="temporary"] {
@@ -54,91 +57,79 @@
     --green: #36c987;
     --red: #c9365d;
 
-    --navbar-right-margin: 215px;  /* Extra space compared to normal mode for "Private Window" label. */
+    --navbar-right-margin: 125px;  /* Extra space compared to normal mode for "Private Window" label. */
+    
+    /* browser-toolbar (address bar + navigation buttons + more tools button + application menu button) 
+       has a slight transparant background. So making it transparant so that theme colors can be seen clearly. */
+    --toolbar-bgcolor: transparent !important; 
 }
+
+
 
 /**
  * Config for MacOS. Override values if MacOS.
  */
-@supports -moz-bool-pref("layout.css.osx-font-smoothing.enabled") {
+@supports (-moz-osx-font-smoothing:auto) {
     :root {
         --navbar-right-margin: 0px;  /* Window control buttons are on the left of the window, so no need to leave space on the right of navbar. */
         --navbar-left-margin: 100px;  /* Space left for "Firefox View" button, and window control buttons. Space just left of navigation buttons. */
-        --navbar-top-margin: -19px;
-        --navbar-bottom-margin: 0px;
+        --navbar-top-margin: -43px;
 
         --firefox-view-button-down-shift: -17px;
         --firefox-view-button-right-shift: 70px;
     }
 }
 
-/***************************
- * Other customizations
- ***************************/
-/* Hide sidebar title */
-#sidebar-header {
-    visibility: collapse
-}
-
-/* Hide sidebar and content divider */
-.sidebar-splitter {
-    border-color: transparent !important;
-}
-
-/* Do we really need bookmark button right in front of your eyes all the time? */
-#star-button-box {
-    visibility: collapse;
-}
-
-/* Hide Open in container icon on address bar */
-#pageAction-urlbar-_testpilot-containers {
-    visibility: collapse;
-}
 
 /***************************
  * Hide tabs
  ***************************/
-/* Hide entire tab box */
-#tabbrowser-tabs, #new-tab-button { /* new-tab-button becomes visible for a short time somehow if a tab is closed using cmd+w, and moves the title bar a little. */
-    visibility: collapse;
+
+/*
+   Hide Firefox view's parent container. This has 
+   1. #tabbrowser-tabs, #new-tab-button  : Hide entire tab box
+   2. .tabs-alltabs-button               : Hide "All Tabs" button
+   3. .titlebar-spacer                   : Titlebar spacer is space just before "Firefox view" button.
+                                           Displayed when window is restored.
+ */
+#TabsToolbar-customization-target {
+    visibility: hidden;
 }
 
-/* Hide "All Tabs" button */
-.tabs-alltabs-button {
-    visibility: collapse;
+/*
+   Tabs have their draggability of window disabled. So, when tabs are hidden but overlapped by navbar,
+   it also disables navbar's ability to drag window. So, recursively enable drag for all child elements
+   of tabs parent container.
+   Also, enable for #scrollbutton-up since it is not child of tabs parent container.
+ */
+#TabsToolbar-customization-target *, #scrollbutton-up {
+    -moz-window-dragging: drag !important;
 }
 
-/* Now, reposition navbar since the space above navbar is now empty. */
+/* Move nav bar up to overlap with tabs bar, which we hid above. */
 #nav-bar {
     margin-top: var(--navbar-top-margin) !important;  /* Move navbar up. */
-    margin-right: var(--navbar-right-margin) !important;
-    margin-bottom: var(--navbar-bottom-margin) !important;
-    margin-left: var(--navbar-left-margin) !important;
-    box-shadow: none !important;  /* A dark line appears above the nav bar. Hide it. */
 }
 
-/* Titlebar spacer is space just before "Firefox view" button. Displayed when window is restored. */
-.titlebar-spacer {
-    visibility: collapse;
+/* Move nav bar up to overlap with tabs bar, which we hid above. */
+#nav-bar {
+    margin-right: 125px !important;
 }
 
-/* Align "Firefox view" vertically in same line as nav-bar */
-#firefox-view-button {
-    position: fixed;
-    margin-top: var(--firefox-view-button-down-shift) !important;
-    margin-left: var(--firefox-view-button-right-shift) !important;
+/**
+ * Now make other cosmetic changes
+ */
+
+/* Hide dark line appears above the nav bar. */
+#nav-bar {
+    box-shadow: none !important;
 }
 
-/* Align "Private Browsing" indicator vertically in same line as nav-bar */
-#private-browsing-indicator-with-label {
-    margin-top: 5px !important;
+/* Make little spacious nav bar. */
+#navigator-toolbox {
+    padding: 3px;
 }
 
-/* browser-toolbar (address bar + navigation buttons + more tools button + application menu button) 
-   has a slight transparant background. So making it transparant so that theme colors can be seen clearly. */
-.browser-toolbar:not(.titlebar-color) {
-    background-color: transparent !important;
-}
 
 
 /******************************************************
@@ -152,17 +143,11 @@
     margin-top: 7px !important;  /* Align buttonbox vertically. Make in same line as address bar. */
 }
 
-/* Move window control buttons much lower for MacOS compared to Windows */
-@supports -moz-bool-pref("layout.css.osx-font-smoothing.enabled") {
-    .titlebar-buttonbox-container {
-        position: fixed;
-        margin-top: 14px !important;
-    }
-}
 
 #navigator-toolbox {
     border-bottom-color: transparent !important;  /* Hide underline of window control box. */
 }
+
 
 /* Change icons: close button */
 .titlebar-close {
@@ -210,4 +195,33 @@
 
 .titlebar-restore:hover {
     opacity: 1 !important;
+}
+
+
+/***************************
+ * Other customizations
+ ***************************/
+/* Hide sidebar title */
+#sidebar-header {
+    visibility: collapse
+}
+
+/* Hide sidebar and content divider */
+.sidebar-splitter {
+    border-color: transparent !important;
+}
+
+/* Do we really need bookmark button right in front of your eyes all the time? */
+#star-button-box {
+    visibility: collapse;
+}
+
+/* Hide Open in container icon on address bar */
+#pageAction-urlbar-_testpilot-containers {
+    visibility: collapse;
+}
+
+/* Collapse useless tracking protection button in address bar */
+#tracking-protection-icon-container {
+    visibility: collapse;
 }
