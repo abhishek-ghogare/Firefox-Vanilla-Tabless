@@ -113,7 +113,7 @@
 
 /* Move nav bar up to overlap with tabs bar, which we hid above. */
 #nav-bar {
-    margin-right: 125px !important;
+    margin-right: var(--navbar-right-margin) !important;
 }
 
 /**
