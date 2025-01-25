@@ -225,3 +225,8 @@
 #tracking-protection-icon-container {
     visibility: collapse;
 }
+
+/* Hide that random horizontal dark line above address bar */
+#nav-bar {
+    border-top: 0px !important;
+}
